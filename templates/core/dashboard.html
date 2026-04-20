@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Visão geral</p>
+    <h1>Dashboard</h1>
+    <p>Resumo operacional da instância atual do programa de fidelidade.</p>
+  </div>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card">
+    <span class="stat-label">Clientes</span>
+    <strong>{{ customer_count }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Compras</span>
+    <strong>{{ purchase_count }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Resgates</span>
+    <strong>{{ redemption_count }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Campanha ativa</span>
+    <strong>{{ campaign.name|default:"Não configurada" }}</strong>
+  </article>
+</section>
+
+<section class="two-column">
+  <article class="panel">
+    <h2>Operação rápida</h2>
+    <p>Registre as compras realizadas pelo lojista e vincule cada atendimento ao cliente correto na campanha atual.</p>
+    <div class="action-row">
+      <a href="{% url 'customers:purchase-association' %}" class="button">Associar compra</a>
+      <a href="{% url 'customers:list' %}" class="button button-secondary">Abrir clientes</a>
+    </div>
+  </article>
+
+  <article class="panel">
+    <h2>Empresa atual</h2>
+    {% if company %}
+      <p><strong>{{ company.name }}</strong></p>
+      <p>{{ company.description|default:"Sem descrição cadastrada." }}</p>
+      <p>{{ company.phone|default:"Sem telefone" }}</p>
+    {% else %}
+      <p>As configurações da empresa ainda não foram preenchidas.</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Últimos clientes</h2>
+  <ul class="history-list">
+    {% for customer in latest_customers %}
+      <li>
+        <strong>{{ customer.name }}</strong>
+        <span class="inline-actions">
+          <a href="{% url 'customers:purchase-association' %}?customer={{ customer.pk }}">Registrar compra</a>
+          <a href="{% url 'customers:detail' customer.pk %}">Abrir</a>
+        </span>
+      </li>
+    {% empty %}
+      <li>Nenhum cliente cadastrado.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

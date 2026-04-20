@@ -1,0 +1,1 @@
+"""Customers and purchases app."""

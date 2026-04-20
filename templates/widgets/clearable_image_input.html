@@ -1,0 +1,21 @@
+<div class="clearable-file-input">
+  {% if widget.is_initial %}
+    <div class="file-current">
+      <span class="file-meta-label">{{ widget.initial_text }}:</span>
+      <a href="{{ widget.value.url }}" target="_blank" rel="noopener noreferrer">{{ widget.value }}</a>
+    </div>
+    {% if not widget.required %}
+      <div class="file-clear">
+        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}">
+        <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <div class="file-change">
+    {% if widget.is_initial %}
+      <span class="file-meta-label">{{ widget.input_text }}:</span>
+    {% endif %}
+    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+  </div>
+</div>

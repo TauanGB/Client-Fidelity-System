@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Campanha{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Fidelidade</p>
+    <h1>Configuracao da campanha</h1>
+    <p>Mantenha apenas uma campanha ativa por deploy e ajuste a meta de compras.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="form-actions">
+      <button type="submit" class="button">Salvar campanha</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Requisitos da imagem da recompensa</h2>
+  <ul class="requirement-list">
+    <li>Formato: {{ reward_image_requirement.allowed_extensions_text }}</li>
+    <li>Recomendado: {{ reward_image_requirement.recommended_size }}</li>
+    <li>Minimo: {{ reward_image_requirement.minimum_width }}x{{ reward_image_requirement.minimum_height }} px</li>
+    <li>Tamanho maximo: {{ reward_image_requirement.max_size_mb }} MB</li>
+    <li>{{ reward_image_requirement.usage_hint }}</li>
+  </ul>
+  {% if object.reward_image %}
+    <div class="image-preview image-preview-square">
+      <img src="{{ object.reward_image.url }}" alt="Imagem da recompensa atual">
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

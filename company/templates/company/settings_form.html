@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Configuracao da Empresa{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Empresa</p>
+    <h1>Configuracao da empresa</h1>
+    <p>Defina identidade visual, contatos e materiais publicos da instancia atual.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="form-actions">
+      <button type="submit" class="button">Salvar configuracoes</button>
+    </div>
+  </form>
+</section>
+
+<section class="two-column">
+  <article class="panel">
+    <h2>Requisitos do logo</h2>
+    <ul class="requirement-list">
+      <li>Formato: {{ image_requirements.logo.allowed_extensions_text }}</li>
+      <li>Recomendado: {{ image_requirements.logo.recommended_size }}</li>
+      <li>Minimo: {{ image_requirements.logo.minimum_width }}x{{ image_requirements.logo.minimum_height }} px</li>
+      <li>Tamanho maximo: {{ image_requirements.logo.max_size_mb }} MB</li>
+      <li>{{ image_requirements.logo.usage_hint }}</li>
+    </ul>
+    {% if object.logo %}
+      <div class="image-preview image-preview-square">
+        <img src="{{ object.logo.url }}" alt="Logo atual">
+      </div>
+    {% endif %}
+  </article>
+
+  <article class="panel">
+    <h2>Requisitos do banner</h2>
+    <ul class="requirement-list">
+      <li>Formato: {{ image_requirements.banner.allowed_extensions_text }}</li>
+      <li>Recomendado: {{ image_requirements.banner.recommended_size }}</li>
+      <li>Minimo: {{ image_requirements.banner.minimum_width }}x{{ image_requirements.banner.minimum_height }} px</li>
+      <li>Tamanho maximo: {{ image_requirements.banner.max_size_mb }} MB</li>
+      <li>{{ image_requirements.banner.usage_hint }}</li>
+    </ul>
+    {% if object.banner %}
+      <div class="image-preview image-preview-banner">
+        <img src="{{ object.banner.url }}" alt="Banner atual">
+      </div>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

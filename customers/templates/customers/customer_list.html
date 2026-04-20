@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-split">
+  <div>
+    <p class="eyebrow">Clientes</p>
+    <h1>Base de clientes</h1>
+    <p>Cadastre e acompanhe os clientes da campanha atual.</p>
+  </div>
+  <div class="action-row">
+    <a href="{% url 'customers:purchase-association' %}" class="button button-secondary">Associar compra</a>
+    <a href="{% url 'customers:create' %}" class="button">Novo cliente</a>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>E-mail</th>
+          <th>Compras</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+          <tr>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.email|default:"-" }}</td>
+            <td>{{ customer.total_purchases }}</td>
+            <td class="table-actions">
+              <a href="{% url 'customers:purchase-association' %}?customer={{ customer.pk }}">Registrar compra</a>
+              <a href="{% url 'customers:detail' customer.pk %}">Abrir</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">Nenhum cliente cadastrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

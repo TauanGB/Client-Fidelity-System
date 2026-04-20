@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Cliente{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Clientes</p>
+    <h1>{% if object %}Editar cliente{% else %}Novo cliente{% endif %}</h1>
+  </div>
+</section>
+
+<section class="panel">
+  <form method="post" class="form-grid">
+    {% csrf_token %}
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="form-actions">
+      <button type="submit" class="button">Salvar cliente</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

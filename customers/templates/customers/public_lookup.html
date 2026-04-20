@@ -1,0 +1,39 @@
+{% extends "public_base.html" %}
+
+{% block title %}Consultar Fidelidade{% endblock %}
+
+{% block public_content %}
+<section class="public-hero-card public-hero-card-lookup">
+  <div class="public-hero-copy">
+    <p class="eyebrow">Consulta de progresso</p>
+    <h1>Consulte seu progresso</h1>
+    <p>Informe seu telefone para localizar seu cadastro e ver quantas compras já foram validadas na campanha atual.</p>
+  </div>
+
+    <form method="post" class="public-lookup-form">
+      {% csrf_token %}
+      {% include "includes/form_fields.html" with form=form %}
+      <button type="submit" class="button">Consultar agora</button>
+    </form>
+</section>
+
+<section class="public-progress-layout">
+  {% if customers %}
+    <aside class="public-card public-card-side">
+      <p class="eyebrow">Resultados</p>
+      <h2>Selecione seu cadastro</h2>
+      <div class="public-customer-results">
+        {% for customer in customers %}
+          <article class="public-customer-result">
+            <div>
+              <strong>{{ customer.name }}</strong>
+              <p>{{ customer.phone }}</p>
+            </div>
+            <a href="{% url 'customers:public-progress' customer.pk %}" class="button button-secondary">Abrir progresso</a>
+          </article>
+        {% endfor %}
+      </div>
+    </aside>
+  {% endif %}
+</section>
+{% endblock %}

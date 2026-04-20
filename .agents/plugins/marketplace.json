@@ -1,0 +1,20 @@
+{
+  "name": "[TODO: marketplace-name]",
+  "interface": {
+    "displayName": "[TODO: Marketplace Display Name]"
+  },
+  "plugins": [
+    {
+      "name": "client-fidelity-system",
+      "source": {
+        "source": "local",
+        "path": "./plugins/client-fidelity-system"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

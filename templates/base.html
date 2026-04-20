@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Client Fidelity System{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <style>
+    :root {
+      --brand-primary: {{ company_settings.primary_color|default:"#1D4ED8" }};
+      --brand-secondary: {{ company_settings.secondary_color|default:"#0F172A" }};
+    }
+  </style>
+</head>
+<body class="theme-{{ company_settings.theme|default:'classic' }}">
+  <div class="shell">
+    <aside class="sidebar">
+      <a href="{% url 'core:dashboard' %}" class="brand">
+        {% if company_settings and company_settings.logo %}
+          <img src="{{ company_settings.logo.url }}" alt="{{ company_settings.name }}" class="brand-logo">
+        {% endif %}
+        <div>
+          <strong>{{ company_settings.name|default:"Client Fidelity System" }}</strong>
+          <span>Painel do lojista</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="{% url 'core:dashboard' %}">Dashboard</a>
+        <a href="{% url 'company:settings' %}">Empresa</a>
+        <a href="{% url 'loyalty:campaign-settings' %}">Campanha</a>
+        <a href="{% url 'customers:list' %}">Clientes</a>
+        <a href="{% url 'customers:purchase-association' %}">Associar compra</a>
+        <a href="{% url 'customers:public-lookup' %}">Tela pública</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        {% if request.user.is_authenticated %}
+          <span>{{ request.user.username }}</span>
+          <a href="{% url 'accounts:logout' %}">Sair</a>
+        {% endif %}
+      </div>
+    </aside>
+
+    <main class="content">
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

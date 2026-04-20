@@ -1,0 +1,16 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block auth_content %}
+<section class="auth-card">
+  <p class="eyebrow">Painel do lojista</p>
+  <h1>Acessar sistema</h1>
+  <form method="post" class="stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Entrar</button>
+  </form>
+  <p class="auth-help">Use o superusuário ou um usuário da equipe local.</p>
+</section>
+{% endblock %}

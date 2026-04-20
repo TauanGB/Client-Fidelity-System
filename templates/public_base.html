@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Programa de Fidelidade{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <style>
+    :root {
+      --brand-primary: {{ company_settings.primary_color|default:"#1D4ED8" }};
+      --brand-secondary: {{ company_settings.secondary_color|default:"#0F172A" }};
+    }
+  </style>
+</head>
+<body class="public-page theme-{{ company_settings.theme|default:'classic' }}">
+  <main class="public-shell">
+    <div class="public-brand-bar">
+      {% if company_settings and company_settings.logo %}
+        <img src="{{ company_settings.logo.url }}" alt="{{ company_settings.name }}" class="public-logo">
+      {% endif %}
+      <div class="public-brand-copy">
+        <strong>{{ company_settings.name|default:"Programa de fidelidade" }}</strong>
+        <span>acompanhe seu progresso em tempo real</span>
+      </div>
+    </div>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="message {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block public_content %}{% endblock %}
+  </main>
+</body>
+</html>

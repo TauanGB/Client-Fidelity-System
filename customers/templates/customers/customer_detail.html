@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.name }}{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-split">
+  <div>
+    <p class="eyebrow">Cliente</p>
+    <h1>{{ customer.name }}</h1>
+    <p>{{ customer.phone }}{% if customer.email %} · {{ customer.email }}{% endif %}</p>
+  </div>
+  <a href="{% url 'customers:update' customer.pk %}" class="button button-secondary">Editar cadastro</a>
+</section>
+
+{% if campaign %}
+<section class="stats-grid">
+  <article class="stat-card">
+    <span class="stat-label">Campanha</span>
+    <strong>{{ campaign.name }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Compras no ciclo</span>
+    <strong>{{ progress.purchase_count }}/{{ progress.required_purchases }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Faltam</span>
+    <strong>{{ progress.remaining_purchases }}</strong>
+  </article>
+  <article class="stat-card">
+    <span class="stat-label">Prêmio</span>
+    <strong>{{ campaign.reward_name }}</strong>
+  </article>
+</section>
+
+<section class="progress-panel">
+  <div class="progress-bar">
+    <span style="width: {{ progress.progress_percent }}%"></span>
+  </div>
+  {% if progress.is_eligible %}
+    <p class="status-ready">Cliente elegível para resgate.</p>
+  {% else %}
+    <p>Faltam {{ progress.remaining_purchases }} compra(s) para liberar o resgate.</p>
+  {% endif %}
+</section>
+{% else %}
+<section class="panel">
+  <p>Cadastre uma campanha ativa antes de operar a fidelidade.</p>
+</section>
+{% endif %}
+
+<section class="panel panel-banner">
+  <div>
+    <p class="eyebrow">Operação</p>
+    <h2>Associação de compras</h2>
+    <p>O lojista pode registrar uma nova compra por este atalho operacional e atualizar o ciclo do cliente.</p>
+  </div>
+  <a href="{% url 'customers:purchase-association' %}?customer={{ customer.pk }}" class="button">Associar compra nesta conta</a>
+</section>
+
+<section class="two-column">
+  <article class="panel">
+    <h2>Registrar compra</h2>
+    <form method="post" action="{% url 'customers:register-purchase' customer.pk %}" class="stack">
+      {% csrf_token %}
+      {{ purchase_form.as_p }}
+      <button type="submit" class="button">Registrar compra</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <h2>Registrar resgate</h2>
+    <form method="post" action="{% url 'loyalty:redeem-reward' customer.pk %}" class="stack">
+      {% csrf_token %}
+      {{ redemption_form.as_p }}
+      <button type="submit" class="button button-secondary" {% if not progress.is_eligible %}disabled{% endif %}>Marcar como resgatado</button>
+    </form>
+  </article>
+</section>
+
+<section class="two-column">
+  <article class="panel">
+    <h2>Histórico de compras</h2>
+    <ul class="history-list">
+      {% for purchase in purchase_records %}
+        <li>
+          <strong>{{ purchase.created_at|date:"d/m/Y H:i" }}</strong>
+          <span>{{ purchase.notes|default:"Compra registrada" }}</span>
+        </li>
+      {% empty %}
+        <li>Nenhuma compra registrada.</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="panel">
+    <h2>Histórico de resgates</h2>
+    <ul class="history-list">
+      {% for redemption in redemptions %}
+        <li>
+          <strong>{{ redemption.redeemed_at|date:"d/m/Y H:i" }}</strong>
+          <span>{{ redemption.notes|default:"Resgate realizado" }}</span>
+        </li>
+      {% empty %}
+        <li>Nenhum resgate registrado.</li>
+      {% endfor %}
+    </ul>
+  </article>
+</section>
+{% endblock %}
