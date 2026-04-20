@@ -168,6 +168,7 @@ WHITENOISE_MAX_AGE = env_int("WHITENOISE_MAX_AGE", default=60 if DEBUG else 3153
 
 MEDIA_URL = env("MEDIA_URL", "/media/")
 MEDIA_ROOT = Path(env("MEDIA_ROOT", str(BASE_DIR / "media")))
+SERVE_MEDIA = env_bool("SERVE_MEDIA", default=DEBUG)
 
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "core:dashboard"
