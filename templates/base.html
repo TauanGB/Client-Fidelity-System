@@ -27,12 +27,28 @@
       </a>
 
       <nav class="nav">
-        <a href="{% url 'core:dashboard' %}">Dashboard</a>
-        <a href="{% url 'company:settings' %}">Empresa</a>
-        <a href="{% url 'loyalty:campaign-settings' %}">Campanha</a>
-        <a href="{% url 'customers:list' %}">Clientes</a>
-        <a href="{% url 'customers:purchase-association' %}">Associar compra</a>
-        <a href="{% url 'customers:public-lookup' %}">Tela pública</a>
+        {% if panel_flow and not panel_flow.setup_ready %}
+          <div class="nav-status-card">
+            <span class="nav-status-label">Configuracao inicial</span>
+            <strong>{{ panel_flow.required_completed }}/{{ panel_flow.required_total }} etapa(s) concluida(s)</strong>
+            <a href="{% url 'core:dashboard' %}" class="nav-status-link">Ver proximos passos</a>
+          </div>
+        {% endif %}
+
+        <div class="nav-section">
+          <span class="nav-section-title">Operacao do dia</span>
+          <a href="{% url 'core:dashboard' %}" class="{% if request.resolver_match.namespace == 'core' %}nav-link-active{% endif %}">Inicio</a>
+          <a href="{% url 'customers:purchase-association' %}" class="{% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name == 'purchase-association' %}nav-link-active{% endif %}">Registrar compra</a>
+          <a href="{% url 'customers:create' %}" class="{% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name == 'create' %}nav-link-active{% endif %}">Novo cliente</a>
+          <a href="{% url 'customers:list' %}" class="{% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name == 'list' %}nav-link-active{% endif %}">Clientes</a>
+        </div>
+
+        <div class="nav-section">
+          <span class="nav-section-title">Configuracao</span>
+          <a href="{% url 'company:settings' %}" class="{% if request.resolver_match.namespace == 'company' %}nav-link-active{% endif %}">Empresa</a>
+          <a href="{% url 'loyalty:campaign-settings' %}" class="{% if request.resolver_match.namespace == 'loyalty' and request.resolver_match.url_name == 'campaign-settings' %}nav-link-active{% endif %}">Campanha</a>
+          <a href="{% url 'customers:public-lookup' %}" class="{% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name == 'public-lookup' %}nav-link-active{% endif %}">Consulta publica</a>
+        </div>
       </nav>
 
       <div class="sidebar-footer">

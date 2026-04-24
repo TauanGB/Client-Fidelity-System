@@ -1,15 +1,86 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
-<section class="page-header">
-  <div>
-    <p class="eyebrow">Visão geral</p>
-    <h1>Dashboard</h1>
-    <p>Resumo operacional da instância atual do programa de fidelidade.</p>
-  </div>
-</section>
+{% if panel_flow and not panel_flow.setup_ready %}
+  <section class="page-header dashboard-hero dashboard-hero-setup">
+    <div>
+      <p class="eyebrow">Configuracao inicial</p>
+      <h1>Vamos deixar o sistema pronto para uso</h1>
+      <p>
+        A configuracao essencial ainda nao foi concluida. Complete as etapas abaixo para que a equipe
+        passe a usar o sistema de forma simples no dia a dia.
+      </p>
+    </div>
+    <div class="hero-action-panel">
+      <span class="hero-kicker">{{ panel_flow.required_completed }}/{{ panel_flow.required_total }} etapa(s) essenciais concluida(s)</span>
+      <strong>{{ panel_flow.next_action.title }}</strong>
+      <p>{{ panel_flow.next_action.description }}</p>
+      <a href="{{ panel_flow.next_action.href }}" class="button">{{ panel_flow.next_action.cta }}</a>
+    </div>
+  </section>
+
+  <section class="setup-grid">
+    <article class="panel">
+      <h2>Etapas essenciais</h2>
+      <p>Essas duas configuracoes estruturam o sistema e evitam que a operacao fique confusa para o lojista.</p>
+      <div class="setup-step-list">
+        {% for step in panel_flow.required_steps %}
+          <article class="setup-step-card{% if step.is_complete %} setup-step-complete{% endif %}">
+            <div class="setup-step-copy">
+              <span class="setup-step-badge">{% if step.is_complete %}Concluida{% else %}Pendente{% endif %}</span>
+              <strong>{{ step.title }}</strong>
+              <p>{{ step.description }}</p>
+            </div>
+            <a href="{{ step.href }}" class="button{% if step.is_complete %} button-secondary{% endif %}">{{ step.cta }}</a>
+          </article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel">
+      <h2>Depois da configuracao</h2>
+      <p>
+        Quando empresa e campanha estiverem prontas, o uso principal da equipe passa a ser bem mais direto:
+        cadastrar clientes novos e registrar compras.
+      </p>
+      <div class="setup-step-list">
+        {% for step in panel_flow.recommended_steps %}
+          <article class="setup-step-card{% if step.is_complete %} setup-step-complete{% endif %}">
+            <div class="setup-step-copy">
+              <span class="setup-step-badge">{% if step.is_complete %}Ja iniciado{% else %}Recomendado{% endif %}</span>
+              <strong>{{ step.title }}</strong>
+              <p>{{ step.description }}</p>
+            </div>
+            <a href="{{ step.href }}" class="button{% if step.is_complete %} button-secondary{% endif %}">{{ step.cta }}</a>
+          </article>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+{% else %}
+  <section class="page-header dashboard-hero dashboard-hero-live">
+    <div>
+      <p class="eyebrow">Operacao do dia</p>
+      <h1>Central de operacao</h1>
+      <p>
+        O sistema ja esta configurado. Daqui em diante, o uso principal fica em registrar compras,
+        cadastrar clientes novos e acompanhar a base ativa.
+      </p>
+      <div class="action-row">
+        <a href="{% url 'customers:purchase-association' %}" class="button">Registrar compra</a>
+        <a href="{% url 'customers:create' %}" class="button button-secondary">Novo cliente</a>
+        <a href="{% url 'customers:list' %}" class="button button-secondary">Abrir clientes</a>
+      </div>
+    </div>
+    <div class="hero-action-panel">
+      <span class="hero-kicker">Fluxo principal</span>
+      <strong>Compras e novos clientes</strong>
+      <p>As configuracoes estruturais ficam em segundo plano e so precisam de ajuste pontual.</p>
+    </div>
+  </section>
+{% endif %}
 
 <section class="stats-grid">
   <article class="stat-card">
@@ -26,45 +97,85 @@
   </article>
   <article class="stat-card">
     <span class="stat-label">Campanha ativa</span>
-    <strong>{{ campaign.name|default:"Não configurada" }}</strong>
+    <strong>{{ campaign.name|default:"Nao configurada" }}</strong>
   </article>
 </section>
 
 <section class="two-column">
   <article class="panel">
-    <h2>Operação rápida</h2>
-    <p>Registre as compras realizadas pelo lojista e vincule cada atendimento ao cliente correto na campanha atual.</p>
-    <div class="action-row">
-      <a href="{% url 'customers:purchase-association' %}" class="button">Associar compra</a>
-      <a href="{% url 'customers:list' %}" class="button button-secondary">Abrir clientes</a>
-    </div>
+    {% if panel_flow and panel_flow.setup_ready %}
+      <h2>Atalhos da operacao</h2>
+      <p>Esses sao os caminhos que a equipe deve usar com mais frequencia durante o atendimento.</p>
+      <div class="shortcut-grid">
+        <a href="{% url 'customers:purchase-association' %}" class="shortcut-card">
+          <strong>Registrar compra</strong>
+          <span>Vincule rapidamente a compra ao cliente correto.</span>
+        </a>
+        <a href="{% url 'customers:create' %}" class="shortcut-card">
+          <strong>Novo cliente</strong>
+          <span>Cadastre um cliente novo sem sair do fluxo operacional.</span>
+        </a>
+        <a href="{% url 'customers:list' %}" class="shortcut-card">
+          <strong>Base de clientes</strong>
+          <span>Consulte o historico e encontre cadastros existentes.</span>
+        </a>
+      </div>
+    {% else %}
+      <h2>Resumo da empresa</h2>
+      {% if company %}
+        <p><strong>{{ company.name }}</strong></p>
+        <p>{{ company.description|default:"Sem descricao cadastrada." }}</p>
+        <p>{{ company.phone|default:"Sem telefone informado." }}</p>
+      {% else %}
+        <p>A empresa ainda nao foi configurada. Esse costuma ser o primeiro passo para deixar o sistema com a identidade da loja.</p>
+      {% endif %}
+    {% endif %}
   </article>
 
   <article class="panel">
-    <h2>Empresa atual</h2>
-    {% if company %}
-      <p><strong>{{ company.name }}</strong></p>
-      <p>{{ company.description|default:"Sem descrição cadastrada." }}</p>
-      <p>{{ company.phone|default:"Sem telefone" }}</p>
-    {% else %}
-      <p>As configurações da empresa ainda não foram preenchidas.</p>
+    <h2>{% if panel_flow and panel_flow.setup_ready %}Ajustes do sistema{% else %}O que falta configurar{% endif %}</h2>
+    {% if panel_flow %}
+      <div class="mini-checklist">
+        {% for step in panel_flow.required_steps %}
+          <div class="mini-checklist-item">
+            <span class="mini-checklist-status{% if step.is_complete %} mini-checklist-status-complete{% endif %}"></span>
+            <div>
+              <strong>{{ step.title }}</strong>
+              <p>{{ step.description }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     {% endif %}
+    <div class="action-row">
+      <a href="{% url 'company:settings' %}" class="button button-secondary">Editar empresa</a>
+      <a href="{% url 'loyalty:campaign-settings' %}" class="button button-secondary">Editar campanha</a>
+    </div>
   </article>
 </section>
 
 <section class="panel">
-  <h2>Últimos clientes</h2>
+  <div class="panel-header">
+    <div>
+      <h2>Ultimos clientes</h2>
+      <p>Area pensada para retomar atendimentos rapidos sem navegar pelo sistema inteiro.</p>
+    </div>
+    <a href="{% url 'customers:list' %}" class="button button-secondary">Ver todos</a>
+  </div>
   <ul class="history-list">
     {% for customer in latest_customers %}
       <li>
-        <strong>{{ customer.name }}</strong>
+        <div>
+          <strong>{{ customer.name }}</strong>
+          <p>Cadastrado em {{ customer.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
         <span class="inline-actions">
           <a href="{% url 'customers:purchase-association' %}?customer={{ customer.pk }}">Registrar compra</a>
           <a href="{% url 'customers:detail' customer.pk %}">Abrir</a>
         </span>
       </li>
     {% empty %}
-      <li>Nenhum cliente cadastrado.</li>
+      <li>Nenhum cliente cadastrado ainda.</li>
     {% endfor %}
   </ul>
 </section>

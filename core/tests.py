@@ -26,6 +26,22 @@ class MvpFlowTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("accounts:login"), response.url)
 
+    def test_dashboard_prioritizes_operation_when_setup_is_ready(self):
+        self.client.login(username="lojista", password="senha-segura-123")
+        response = self.client.get(reverse("core:dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Central de operacao")
+        self.assertContains(response, "Registrar compra")
+        self.assertContains(response, "Novo cliente")
+
+    def test_dashboard_guides_initial_setup_when_campaign_is_missing(self):
+        self.campaign.delete()
+        self.client.login(username="lojista", password="senha-segura-123")
+        response = self.client.get(reverse("core:dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Configuracao inicial")
+        self.assertContains(response, "Configurar campanha")
+
     def test_purchase_progress_and_redemption_cycle(self):
         for _ in range(3):
             PurchaseRecord.objects.create(customer=self.customer, campaign=self.campaign)

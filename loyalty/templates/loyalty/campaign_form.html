@@ -11,6 +11,18 @@
   </div>
 </section>
 
+{% if panel_flow %}
+  <section class="panel flow-banner">
+    <span class="flow-banner-step">Etapa 2 de {{ panel_flow.required_total }}</span>
+    <strong>Essa etapa define a regra que a equipe vai usar no dia a dia.</strong>
+    <p>Depois da campanha pronta, o uso principal do sistema passa a ser cadastrar clientes novos e registrar compras.</p>
+    <div class="action-row">
+      <a href="{% url 'customers:create' %}" class="button">Cadastrar primeiro cliente</a>
+      <a href="{% url 'customers:purchase-association' %}" class="button button-secondary">Registrar compra</a>
+    </div>
+  </section>
+{% endif %}
+
 <section class="panel">
   <form method="post" enctype="multipart/form-data" class="form-grid">
     {% csrf_token %}

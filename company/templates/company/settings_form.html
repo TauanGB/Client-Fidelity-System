@@ -11,6 +11,17 @@
   </div>
 </section>
 
+{% if panel_flow %}
+  <section class="panel flow-banner">
+    <span class="flow-banner-step">Etapa 1 de {{ panel_flow.required_total }}</span>
+    <strong>Essa etapa deixa o sistema com a cara da loja.</strong>
+    <p>Depois de salvar a empresa, o proximo passo natural e configurar a campanha que sera usada no atendimento.</p>
+    <div class="action-row">
+      <a href="{% url 'loyalty:campaign-settings' %}" class="button button-secondary">Ir para campanha</a>
+    </div>
+  </section>
+{% endif %}
+
 <section class="panel">
   <form method="post" enctype="multipart/form-data" class="form-grid">
     {% csrf_token %}

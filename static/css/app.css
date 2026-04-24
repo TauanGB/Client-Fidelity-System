@@ -73,11 +73,70 @@ img {
   gap: 10px;
 }
 
+.nav-section {
+  display: grid;
+  gap: 10px;
+}
+
+.nav-section + .nav-section {
+  margin-top: 10px;
+}
+
+.nav-section-title {
+  color: rgba(255, 255, 255, 0.58);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0 4px;
+}
+
 .nav a {
   color: #fff;
   padding: 12px 14px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 14px;
+}
+
+.nav-link-active {
+  background: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.nav-status-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 6px;
+}
+
+.nav-status-label,
+.hero-kicker,
+.flow-banner-step,
+.setup-step-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.nav-status-label {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-status-card strong,
+.nav-status-link {
+  color: #fff;
+}
+
+.nav-status-link {
+  font-weight: 700;
 }
 
 .sidebar-footer {
@@ -100,6 +159,46 @@ img {
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
+}
+
+.dashboard-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+  gap: 18px;
+  padding: 28px;
+  border-radius: 28px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(219, 227, 238, 0.8);
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-hero-setup {
+  background:
+    radial-gradient(circle at top left, rgba(29, 78, 216, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.96));
+}
+
+.dashboard-hero-live {
+  background:
+    radial-gradient(circle at top left, rgba(21, 128, 61, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(240, 253, 244, 0.95));
+}
+
+.hero-action-panel {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border);
+}
+
+.hero-kicker,
+.flow-banner-step,
+.setup-step-badge {
+  color: var(--brand-primary);
+  background: rgba(29, 78, 216, 0.1);
 }
 
 .eyebrow {
@@ -129,6 +228,104 @@ img {
 .auth-card,
 .progress-panel {
   padding: 24px;
+}
+
+.setup-grid,
+.shortcut-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.setup-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 24px;
+}
+
+.setup-step-list,
+.mini-checklist {
+  display: grid;
+  gap: 14px;
+}
+
+.setup-step-card,
+.shortcut-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-muted);
+}
+
+.setup-step-complete {
+  background: rgba(220, 252, 231, 0.45);
+}
+
+.setup-step-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.setup-step-copy strong,
+.shortcut-card strong {
+  line-height: 1.3;
+}
+
+.setup-step-copy p,
+.shortcut-card span,
+.mini-checklist-item p,
+.hero-action-panel p,
+.flow-banner p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.shortcut-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 18px;
+}
+
+.shortcut-card {
+  display: grid;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.shortcut-card:hover {
+  border-color: rgba(29, 78, 216, 0.35);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.mini-checklist-item {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.mini-checklist-status {
+  width: 14px;
+  height: 14px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.mini-checklist-status-complete {
+  background: var(--success);
+}
+
+.flow-banner {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
 }
 
 .stats-grid,
@@ -987,7 +1184,9 @@ td {
   .public-summary-list li,
   .public-customer-result,
   .public-brand-bar,
-  .public-section-heading {
+  .public-section-heading,
+  .dashboard-hero,
+  .setup-step-card {
     display: grid;
   }
 
@@ -999,7 +1198,8 @@ td {
   .purchase-layout,
   .purchase-search-main,
   .public-progress-layout,
-  .public-progress-scoreboard {
+  .public-progress-scoreboard,
+  .shortcut-grid {
     grid-template-columns: 1fr;
   }
 
