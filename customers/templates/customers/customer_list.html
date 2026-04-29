@@ -7,7 +7,7 @@
   <div>
     <p class="eyebrow">Clientes</p>
     <h1>Base de clientes</h1>
-    <p>Cadastre e acompanhe os clientes da campanha atual.</p>
+    <p>Cadastre clientes, acompanhe quantos pets cada um possui e identifique quem ainda nao comprou em {{ current_month_label }}.</p>
   </div>
   <div class="action-row">
     <a href="{% url 'customers:purchase-association' %}" class="button button-secondary">Associar compra</a>
@@ -16,23 +16,46 @@
 </section>
 
 <section class="panel">
+  <div class="customer-legend">
+    <span class="customer-status-pill customer-status-fresh">Comprou neste mes</span>
+    <span class="customer-status-pill customer-status-watch">Ainda nao comprou neste mes</span>
+    <span class="customer-status-pill customer-status-warning">Atencao</span>
+    <span class="customer-status-pill customer-status-danger">Quase 1 mes sem comprar</span>
+    <span class="customer-status-pill customer-status-critical">Mais de 1 mes ou sem compras</span>
+  </div>
+
   <div class="table-wrapper">
     <table>
       <thead>
         <tr>
           <th>Nome</th>
+          <th>Pets</th>
           <th>Telefone</th>
           <th>E-mail</th>
+          <th>Ultima compra</th>
+          <th>Status do mes</th>
           <th>Compras</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         {% for customer in customers %}
-          <tr>
+          <tr class="{{ customer.month_status.row_class }}">
             <td>{{ customer.name }}</td>
+            <td>{{ customer.pet_count }}</td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email|default:"-" }}</td>
+            <td>
+              {% if customer.last_purchase_at %}
+                {{ customer.last_purchase_at|date:"d/m/Y" }}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              <span class="customer-status-pill {{ customer.month_status.badge_class }}">{{ customer.month_status.label }}</span>
+              <small class="customer-status-detail">{{ customer.month_status.detail }}</small>
+            </td>
             <td>{{ customer.total_purchases }}</td>
             <td class="table-actions">
               <a href="{% url 'customers:purchase-association' %}?customer={{ customer.pk }}">Registrar compra</a>
@@ -41,7 +64,7 @@
           </tr>
         {% empty %}
           <tr>
-            <td colspan="5">Nenhum cliente cadastrado.</td>
+            <td colspan="8">Nenhum cliente cadastrado.</td>
           </tr>
         {% endfor %}
       </tbody>

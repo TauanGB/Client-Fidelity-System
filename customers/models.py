@@ -7,6 +7,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, unique=True)
     email = models.EmailField(blank=True)
+    pet_count = models.PositiveIntegerField(default=1)
     public_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

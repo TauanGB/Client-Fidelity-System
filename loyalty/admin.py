@@ -5,7 +5,16 @@ from .models import LoyaltyCampaign, RewardRedemption, ThemePreset
 
 @admin.register(LoyaltyCampaign)
 class LoyaltyCampaignAdmin(admin.ModelAdmin):
-    list_display = ("name", "required_purchases", "reward_name", "is_active", "updated_at")
+    list_display = (
+        "name",
+        "rule_type",
+        "required_purchases",
+        "cycle_length_months",
+        "minimum_purchases_per_month",
+        "reward_name",
+        "is_active",
+        "updated_at",
+    )
 
 
 @admin.register(RewardRedemption)

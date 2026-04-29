@@ -3,9 +3,19 @@ from django.db import models
 
 
 class LoyaltyCampaign(models.Model):
+    RULE_TYPE_PURCHASE_COUNT = "purchase_count"
+    RULE_TYPE_MONTHLY_CONSECUTIVE = "monthly_consecutive"
+    RULE_TYPE_CHOICES = [
+        (RULE_TYPE_PURCHASE_COUNT, "Meta por total de compras"),
+        (RULE_TYPE_MONTHLY_CONSECUTIVE, "Ciclo mensal consecutivo"),
+    ]
+
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
+    rule_type = models.CharField(max_length=32, choices=RULE_TYPE_CHOICES, default=RULE_TYPE_PURCHASE_COUNT)
     required_purchases = models.PositiveIntegerField(default=10)
+    cycle_length_months = models.PositiveIntegerField(default=3)
+    minimum_purchases_per_month = models.PositiveIntegerField(default=1)
     reward_name = models.CharField(max_length=150)
     reward_description = models.TextField(blank=True)
     reward_image = models.FileField(upload_to="rewards/", blank=True)
@@ -18,8 +28,13 @@ class LoyaltyCampaign(models.Model):
         verbose_name_plural = "Campanhas de fidelidade"
 
     def clean(self):
-        if self.required_purchases < 1:
+        if self.rule_type == self.RULE_TYPE_PURCHASE_COUNT and self.required_purchases < 1:
             raise ValidationError("A campanha deve exigir pelo menos 1 compra.")
+        if self.rule_type == self.RULE_TYPE_MONTHLY_CONSECUTIVE:
+            if self.cycle_length_months < 1:
+                raise ValidationError("O ciclo mensal deve ter pelo menos 1 mes.")
+            if self.minimum_purchases_per_month < 1:
+                raise ValidationError("A campanha deve exigir pelo menos 1 compra por mes.")
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -34,6 +49,10 @@ class LoyaltyCampaign(models.Model):
     @classmethod
     def get_active(cls):
         return cls.objects.filter(is_active=True).first() or cls.objects.first()
+
+    @property
+    def is_monthly_consecutive(self):
+        return self.rule_type == self.RULE_TYPE_MONTHLY_CONSECUTIVE
 
 
 class ThemePreset(models.Model):

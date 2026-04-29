@@ -5,7 +5,7 @@ from .models import Customer, PurchaseRecord
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("name", "phone", "email", "created_at")
+    list_display = ("name", "pet_count", "phone", "email", "created_at")
     search_fields = ("name", "phone", "email")
 
 

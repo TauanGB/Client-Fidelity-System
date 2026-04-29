@@ -7,14 +7,16 @@
   <div class="public-hero-copy">
     <p class="eyebrow">Consulta de progresso</p>
     <h1>Consulte seu progresso</h1>
-    <p>Informe seu telefone para localizar seu cadastro e ver quantas compras já foram validadas na campanha atual.</p>
+    <p>Informe seu telefone para localizar seu cadastro e ver quantas compras ja foram validadas na campanha atual.</p>
   </div>
 
-    <form method="post" class="public-lookup-form">
-      {% csrf_token %}
-      {% include "includes/form_fields.html" with form=form %}
+  <form method="post" class="public-lookup-form form-shell form-shell-compact">
+    {% csrf_token %}
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="form-actions">
       <button type="submit" class="button">Consultar agora</button>
-    </form>
+    </div>
+  </form>
 </section>
 
 <section class="public-progress-layout">

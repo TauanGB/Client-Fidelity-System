@@ -17,6 +17,8 @@
   <div class="public-hero-badge">
     {% if progress.is_eligible %}
       <span>Presente liberado</span>
+    {% elif progress.rule_type == "monthly_consecutive" and progress.current_cycle_month_number %}
+      <span>Mês {{ progress.current_cycle_month_number }} de {{ progress.cycle_length_months }}</span>
     {% elif progress.campaign %}
       <span>{{ progress.remaining_purchases }} compra(s) para chegar lá</span>
     {% else %}
@@ -45,41 +47,80 @@
         </div>
       </div>
 
-      <div class="public-progress-scoreboard">
-        <div class="public-score-card">
-          <span>Compras validadas</span>
-          <strong>{{ progress.purchase_count }}</strong>
+      {% if progress.rule_type == "monthly_consecutive" %}
+        <div class="public-progress-scoreboard">
+          <div class="public-score-card">
+            <span>Meses concluídos</span>
+            <strong>{{ progress.completed_months }}/{{ progress.cycle_length_months }}</strong>
+          </div>
+          <div class="public-score-card">
+            <span>Mês atual</span>
+            <strong>{{ progress.current_month_purchases }}/{{ progress.minimum_purchases_per_month }}</strong>
+          </div>
+          <div class="public-score-card">
+            <span>Status</span>
+            <strong>{{ progress.status_label }}</strong>
+          </div>
         </div>
-        <div class="public-score-card">
-          <span>Meta da campanha</span>
-          <strong>{{ progress.required_purchases }}</strong>
-        </div>
-        <div class="public-score-card">
-          <span>Faltam</span>
-          <strong>{{ progress.remaining_purchases }}</strong>
-        </div>
-      </div>
 
-      <div class="public-progress-track">
-        <div class="public-progress-track-head">
-          <strong>{{ progress.progress_percent }}% completo</strong>
-          <span>{{ progress.purchase_count }}/{{ progress.required_purchases }} compras</span>
+        <div class="public-progress-track">
+          <div class="public-progress-track-head">
+            <strong>{{ progress.progress_percent }}% completo</strong>
+            {% if progress.current_cycle_month_number %}
+              <span>Mês {{ progress.current_cycle_month_number }} de {{ progress.cycle_length_months }}</span>
+            {% else %}
+              <span>O ciclo começa na primeira compra</span>
+            {% endif %}
+          </div>
+          <div class="progress-bar progress-bar-public">
+            <span style="width: {{ progress.progress_percent }}%"></span>
+          </div>
         </div>
-        <div class="progress-bar progress-bar-public">
-          <span style="width: {{ progress.progress_percent }}%"></span>
-        </div>
-      </div>
 
-      {% if progress.is_eligible %}
-        <div class="public-celebration-card">
-          <strong>Seu prêmio já está liberado.</strong>
-          <p>Passe no estabelecimento e informe seu nome para resgatar.</p>
+        <div class="public-note-card">
+          <strong>{{ progress.status_label }}</strong>
+          <p>{{ progress.status_detail }}</p>
+          {% if progress.current_cycle_started_at %}
+            <p>Ciclo iniciado em {{ progress.current_cycle_started_at|date:"m/Y" }} e previsto para fechar em {{ progress.current_cycle_deadline|date:"m/Y" }}.</p>
+          {% endif %}
         </div>
       {% else %}
-        <div class="public-note-card">
-          <strong>Você está no caminho certo.</strong>
-          <p>Continue acumulando compras para liberar seu próximo presente.</p>
+        <div class="public-progress-scoreboard">
+          <div class="public-score-card">
+            <span>Compras validadas</span>
+            <strong>{{ progress.purchase_count }}</strong>
+          </div>
+          <div class="public-score-card">
+            <span>Meta da campanha</span>
+            <strong>{{ progress.required_purchases }}</strong>
+          </div>
+          <div class="public-score-card">
+            <span>Faltam</span>
+            <strong>{{ progress.remaining_purchases }}</strong>
+          </div>
         </div>
+
+        <div class="public-progress-track">
+          <div class="public-progress-track-head">
+            <strong>{{ progress.progress_percent }}% completo</strong>
+            <span>{{ progress.purchase_count }}/{{ progress.required_purchases }} compras</span>
+          </div>
+          <div class="progress-bar progress-bar-public">
+            <span style="width: {{ progress.progress_percent }}%"></span>
+          </div>
+        </div>
+
+        {% if progress.is_eligible %}
+          <div class="public-celebration-card">
+            <strong>Seu prêmio já está liberado.</strong>
+            <p>Passe no estabelecimento e informe seu nome para resgatar.</p>
+          </div>
+        {% else %}
+          <div class="public-note-card">
+            <strong>Você está no caminho certo.</strong>
+            <p>Continue acumulando compras para liberar seu próximo presente.</p>
+          </div>
+        {% endif %}
       {% endif %}
     {% else %}
       <p>Nenhuma campanha ativa foi configurada ainda.</p>
@@ -109,7 +150,7 @@
             {% if progress.is_eligible %}
               Resgate disponível
             {% else %}
-              Em progresso
+              {{ progress.status_label }}
             {% endif %}
           </strong>
         </li>

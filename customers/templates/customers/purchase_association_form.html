@@ -5,9 +5,9 @@
 {% block content %}
 <section class="page-header page-header-split">
   <div>
-    <p class="eyebrow">Operação</p>
+    <p class="eyebrow">Operacao</p>
     <h1>Associar compra realizada</h1>
-    <p>Busque o cliente, confira o progresso atual e confirme a compra com mais segurança.</p>
+    <p>Busque o cliente, confira o progresso atual e confirme a compra com mais seguranca.</p>
   </div>
   <a href="{% url 'customers:list' %}" class="button button-secondary">Voltar para clientes</a>
 </section>
@@ -18,7 +18,7 @@
     <div class="panel-header">
       <div>
         <h2>Buscar cliente</h2>
-        <p>Pesquise por nome, telefone ou e-mail. Para operação rápida, use os filtros prontos.</p>
+        <p>Pesquise por nome, telefone ou e-mail. Para operacao rapida, use os filtros prontos.</p>
       </div>
       <a href="{% url 'customers:create' %}" class="button button-secondary">Novo cliente</a>
     </div>
@@ -29,7 +29,7 @@
           type="search"
           name="q"
           value="{{ search_query }}"
-          placeholder="Nome, telefone, últimos 4 dígitos ou e-mail"
+          placeholder="Nome, telefone, ultimos 4 digitos ou e-mail"
         >
         <button type="submit" class="button">Buscar</button>
       </div>
@@ -52,13 +52,17 @@
             <div class="search-result-main">
               <div>
                 <strong>{{ customer.name }}</strong>
-                <p>{{ customer.phone }}{% if customer.email %} · {{ customer.email }}{% endif %}</p>
+                <p>{{ customer.phone }}{% if customer.email %} - {{ customer.email }}{% endif %} - {{ customer.pet_count }} pet(s)</p>
               </div>
               <div class="search-result-stats">
                 <span class="result-pill">Total {{ customer.total_purchases }} compra(s)</span>
                 {% if customer.progress_snapshot %}
                   {% if customer.progress_snapshot.is_eligible %}
                     <span class="result-pill result-pill-success">Pronto para resgate</span>
+                  {% elif customer.progress_snapshot.rule_type == "monthly_consecutive" %}
+                    <span class="result-pill">
+                      Mes {{ customer.progress_snapshot.current_cycle_month_number|default:0 }}/{{ customer.progress_snapshot.cycle_length_months }}
+                    </span>
                   {% else %}
                     <span class="result-pill">Faltam {{ customer.progress_snapshot.remaining_purchases }}</span>
                   {% endif %}
@@ -69,7 +73,7 @@
             <div class="search-result-footer">
               <div class="search-result-meta">
                 {% if customer.last_purchase_at %}
-                  <span>Última compra em {{ customer.last_purchase_at|date:"d/m/Y H:i" }}</span>
+                  <span>Ultima compra em {{ customer.last_purchase_at|date:"d/m/Y H:i" }}</span>
                 {% else %}
                   <span>Nenhuma compra registrada</span>
                 {% endif %}
@@ -94,8 +98,8 @@
       </div>
     {% else %}
       <div class="empty-search-state">
-        <strong>Use a busca para iniciar a associação.</strong>
-        <p>Os filtros rápidos ajudam quando a base é grande ou quando você quer priorizar clientes mais próximos do resgate.</p>
+        <strong>Use a busca para iniciar a associacao.</strong>
+        <p>Os filtros rapidos ajudam quando a base e grande ou quando voce quer priorizar clientes mais proximos do resgate.</p>
       </div>
     {% endif %}
   </article>
@@ -111,46 +115,49 @@
     <div class="context-card campaign-summary">
       <span class="stat-label">Campanha ativa</span>
       <strong>{{ campaign.name }}</strong>
-      <p>{{ campaign.reward_name }} após {{ campaign.required_purchases }} compra(s).</p>
+      {% if campaign.rule_type == "monthly_consecutive" %}
+        <p>{{ campaign.cycle_length_months }} mes(es) consecutivos com minimo de {{ campaign.minimum_purchases_per_month }} compra(s) por mes.</p>
+      {% else %}
+        <p>{{ campaign.reward_name }} apos {{ campaign.required_purchases }} compra(s).</p>
+      {% endif %}
     </div>
 
     {% if selected_customer and selected_customer_progress %}
       <div class="context-card selected-customer-card">
         <span class="stat-label">Cliente selecionado</span>
         <strong>{{ selected_customer.name }}</strong>
-        <p>{{ selected_customer.phone }}{% if selected_customer.email %} · {{ selected_customer.email }}{% endif %}</p>
+        <p>{{ selected_customer.phone }}{% if selected_customer.email %} - {{ selected_customer.email }}{% endif %} - {{ selected_customer.pet_count }} pet(s)</p>
         <div class="progress-bar">
           <span style="width: {{ selected_customer_progress.progress_percent }}%"></span>
         </div>
-        <p>
-          Progresso atual: {{ selected_customer_progress.purchase_count }}/{{ selected_customer_progress.required_purchases }}
-          {% if selected_customer_progress.is_eligible %}
-            · pronto para resgate
-          {% else %}
-            · faltam {{ selected_customer_progress.remaining_purchases }}
-          {% endif %}
-        </p>
+        {% if selected_customer_progress.rule_type == "monthly_consecutive" %}
+          <p>{{ selected_customer_progress.status_detail }}</p>
+          <p>
+            {% if selected_customer_progress.current_cycle_month_number %}
+              Mes {{ selected_customer_progress.current_cycle_month_number }} de {{ selected_customer_progress.cycle_length_months }}
+              - {{ selected_customer_progress.current_month_purchases }}/{{ selected_customer_progress.minimum_purchases_per_month }} no mes atual
+            {% else %}
+              Aguardando uma nova compra para iniciar o ciclo.
+            {% endif %}
+          </p>
+        {% else %}
+          <p>
+            Progresso atual: {{ selected_customer_progress.purchase_count }}/{{ selected_customer_progress.required_purchases }}
+            {% if selected_customer_progress.is_eligible %}
+              - pronto para resgate
+            {% else %}
+              - faltam {{ selected_customer_progress.remaining_purchases }}
+            {% endif %}
+          </p>
+        {% endif %}
         {% if selected_customer_last_purchase %}
-          <p>Última compra em {{ selected_customer_last_purchase.created_at|date:"d/m/Y H:i" }}</p>
+          <p>Ultima compra em {{ selected_customer_last_purchase.created_at|date:"d/m/Y H:i" }}</p>
         {% endif %}
       </div>
 
-      <form method="post" class="form-grid purchase-confirm-form">
+      <form method="post" class="form-shell form-shell-compact purchase-confirm-form">
         {% csrf_token %}
-        {{ form.customer }}
-        <div class="field-block">
-          <label for="{{ form.notes.id_for_label }}">{{ form.notes.label }}</label>
-          {{ form.notes }}
-          {% if form.notes.help_text %}
-            <p class="field-help">{{ form.notes.help_text }}</p>
-          {% endif %}
-          {% for error in form.notes.errors %}
-            <p class="field-error">{{ error }}</p>
-          {% endfor %}
-        </div>
-        {% for error in form.customer.errors %}
-          <p class="field-error">{{ error }}</p>
-        {% endfor %}
+        {% include "includes/form_fields.html" with form=form %}
         <div class="form-actions">
           <button type="submit" class="button">Registrar compra</button>
         </div>
@@ -158,7 +165,7 @@
     {% else %}
       <div class="empty-search-state empty-search-state-tight">
         <strong>Nenhum cliente selecionado.</strong>
-        <p>Escolha um cliente na busca ao lado para liberar a confirmação da compra.</p>
+        <p>Escolha um cliente na busca ao lado para liberar a confirmacao da compra.</p>
       </div>
     {% endif %}
   </aside>

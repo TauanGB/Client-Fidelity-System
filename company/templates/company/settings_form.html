@@ -23,9 +23,64 @@
 {% endif %}
 
 <section class="panel">
-  <form method="post" enctype="multipart/form-data" class="form-grid">
+  <form method="post" enctype="multipart/form-data" class="form-shell">
     {% csrf_token %}
-    {% include "includes/form_fields.html" with form=form %}
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="form-non-field-errors">
+        {% for error in form.non_field_errors %}
+          <p class="field-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Identidade</h2>
+          <p>Campos principais para apresentar a loja na operacao e nas paginas publicas.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.name span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.description span_class="field-span-full" %}
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Contato</h2>
+          <p>Informacoes usadas para atendimento e referencia da unidade.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.phone span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.whatsapp span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.address span_class="field-span-full" %}
+        {% include "includes/form_field.html" with field=form.instagram span_class="field-span-half" %}
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Tema e midia</h2>
+          <p>Organize a aparencia da marca, as cores principais e os arquivos visuais.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.theme span_class="field-span-full" %}
+        {% include "includes/form_field.html" with field=form.primary_color span_class="field-span-compact" %}
+        {% include "includes/form_field.html" with field=form.secondary_color span_class="field-span-compact" %}
+        {% include "includes/form_field.html" with field=form.logo span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.banner span_class="field-span-full" %}
+      </div>
+    </section>
+
     <div class="form-actions">
       <button type="submit" class="button">Salvar configuracoes</button>
     </div>

@@ -24,9 +24,74 @@
 {% endif %}
 
 <section class="panel">
-  <form method="post" enctype="multipart/form-data" class="form-grid">
+  <form method="post" enctype="multipart/form-data" class="form-shell">
     {% csrf_token %}
-    {% include "includes/form_fields.html" with form=form %}
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="form-non-field-errors">
+        {% for error in form.non_field_errors %}
+          <p class="field-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Dados da campanha</h2>
+          <p>Informacoes basicas para identificar a campanha no painel e nas telas publicas.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.name span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.description span_class="field-span-full" %}
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Regra de fidelidade</h2>
+          <p>Organize a logica da campanha sem ocupar a tela inteira com campos soltos.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.rule_type span_class="field-span-full" extra_classes="rule-field" %}
+        {% include "includes/form_field.html" with field=form.required_purchases span_class="field-span-half" extra_classes="rule-group rule-group-purchase_count" %}
+        {% include "includes/form_field.html" with field=form.cycle_length_months span_class="field-span-half" extra_classes="rule-group rule-group-monthly_consecutive" %}
+        {% include "includes/form_field.html" with field=form.minimum_purchases_per_month span_class="field-span-half" extra_classes="rule-group rule-group-monthly_consecutive" %}
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Recompensa</h2>
+          <p>Defina o premio e a comunicacao visual usada para apresentar a campanha.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.reward_name span_class="field-span-half" %}
+        {% include "includes/form_field.html" with field=form.reward_description span_class="field-span-full" %}
+        {% include "includes/form_field.html" with field=form.reward_image span_class="field-span-full" %}
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2>Publicacao</h2>
+          <p>Controle rapidamente se esta campanha esta pronta para operar.</p>
+        </div>
+      </div>
+      <div class="form-section-grid">
+        {% include "includes/form_field.html" with field=form.is_active span_class="field-span-full" %}
+      </div>
+    </section>
+
     <div class="form-actions">
       <button type="submit" class="button">Salvar campanha</button>
     </div>
@@ -48,4 +113,23 @@
     </div>
   {% endif %}
 </section>
+<script>
+  (function() {
+    const ruleField = document.getElementById("{{ form.rule_type.id_for_label }}");
+    if (!ruleField) {
+      return;
+    }
+
+    const toggleGroups = () => {
+      const currentRule = ruleField.value;
+      document.querySelectorAll(".rule-group").forEach((element) => {
+        const shouldShow = element.classList.contains(`rule-group-${currentRule}`);
+        element.hidden = !shouldShow;
+      });
+    };
+
+    toggleGroups();
+    ruleField.addEventListener("change", toggleGroups);
+  })();
+</script>
 {% endblock %}

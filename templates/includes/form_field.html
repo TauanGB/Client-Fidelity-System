@@ -1,0 +1,47 @@
+{% if field.is_hidden %}
+  {{ field }}
+{% else %}
+  <div class="field-block {{ span_class|default:'field-span-full' }}{% if extra_classes %} {{ extra_classes }}{% endif %}{% if field.field.widget.input_type == 'radio' %} field-block-radio{% endif %}{% if field.field.widget.input_type == 'color' %} field-block-color{% endif %}{% if field.field.widget.input_type == 'file' %} field-block-file{% endif %}{% if field.field.widget.input_type == 'checkbox' %} field-block-checkbox{% endif %}">
+    {% if field.field.widget.input_type == "checkbox" %}
+      <div class="checkbox-field">
+        {{ field }}
+        <div class="checkbox-field-copy">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% if field.help_text %}
+            <p class="field-help">{{ field.help_text }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+      {% if field.field.widget.input_type == "radio" %}
+        <div class="choice-group" role="radiogroup" aria-labelledby="{{ field.id_for_label }}">
+          {% for choice in field %}
+            <label class="choice-card" for="{{ choice.id_for_label }}">
+              {{ choice.tag }}
+              <span class="choice-card-content">
+                <span class="choice-card-title">{{ choice.choice_label }}</span>
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      {% elif field.field.widget.input_type == "color" %}
+        <div class="color-field">
+          {{ field }}
+          <span class="color-value">{{ field.value|default_if_none:'' }}</span>
+        </div>
+      {% else %}
+        {{ field }}
+      {% endif %}
+
+      {% if field.help_text %}
+        <p class="field-help">{{ field.help_text }}</p>
+      {% endif %}
+    {% endif %}
+
+    {% for error in field.errors %}
+      <p class="field-error">{{ error }}</p>
+    {% endfor %}
+  </div>
+{% endif %}

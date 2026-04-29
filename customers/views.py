@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Max, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
 from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView, UpdateView
 
@@ -15,13 +16,78 @@ from .forms import CustomerForm, CustomerPublicLookupForm, PurchaseAssociationFo
 from .models import Customer, PurchaseRecord
 
 
+def build_customer_month_status(customer, today=None):
+    today = today or timezone.localdate()
+    month_start = today.replace(day=1)
+    last_purchase_at = getattr(customer, "last_purchase_at", None)
+    if not last_purchase_at:
+        return {
+            "row_class": "customer-row-critical",
+            "badge_class": "customer-status-critical",
+            "label": "Sem compras",
+            "detail": "Nenhuma compra registrada ainda.",
+            "days_without_purchase": None,
+            "has_purchased_this_month": False,
+        }
+
+    last_purchase_date = timezone.localtime(last_purchase_at).date()
+    days_without_purchase = max((today - last_purchase_date).days, 0)
+    has_purchased_this_month = last_purchase_date >= month_start
+    if has_purchased_this_month:
+        return {
+            "row_class": "customer-row-fresh",
+            "badge_class": "customer-status-fresh",
+            "label": "Comprou neste mes",
+            "detail": f"Ultima compra ha {days_without_purchase} dia(s).",
+            "days_without_purchase": days_without_purchase,
+            "has_purchased_this_month": True,
+        }
+
+    if days_without_purchase >= 30:
+        row_class = "customer-row-critical"
+        badge_class = "customer-status-critical"
+        label = "Mais de 1 mes sem comprar"
+    elif days_without_purchase >= 24:
+        row_class = "customer-row-danger"
+        badge_class = "customer-status-danger"
+        label = "Muito perto de 1 mes"
+    elif days_without_purchase >= 16:
+        row_class = "customer-row-warning"
+        badge_class = "customer-status-warning"
+        label = "Atencao"
+    else:
+        row_class = "customer-row-watch"
+        badge_class = "customer-status-watch"
+        label = "Sem compra neste mes"
+
+    return {
+        "row_class": row_class,
+        "badge_class": badge_class,
+        "label": label,
+        "detail": f"{days_without_purchase} dia(s) sem comprar.",
+        "days_without_purchase": days_without_purchase,
+        "has_purchased_this_month": False,
+    }
+
+
 class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer
     template_name = "customers/customer_list.html"
     context_object_name = "customers"
 
     def get_queryset(self):
-        return Customer.objects.annotate(total_purchases=Count("purchase_records")).order_by("name")
+        return Customer.objects.annotate(
+            total_purchases=Count("purchase_records"),
+            last_purchase_at=Max("purchase_records__created_at"),
+        ).order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = timezone.localdate()
+        for customer in context["customers"]:
+            customer.month_status = build_customer_month_status(customer, today=today)
+        context["current_month_label"] = today.strftime("%m/%Y")
+        return context
 
 
 class PurchaseAssociationView(LoginRequiredMixin, FormView):
@@ -84,7 +150,7 @@ class PurchaseAssociationView(LoginRequiredMixin, FormView):
         enriched_customers = []
         for customer in customers:
             progress = customer_progress(customer, campaign) if campaign else None
-            if search_mode == "almost-ready" and (not progress or progress["remaining_purchases"] != 1):
+            if search_mode == "almost-ready" and (not progress or not progress.get("is_almost_ready")):
                 continue
             if search_mode == "ready" and (not progress or not progress["is_eligible"]):
                 continue

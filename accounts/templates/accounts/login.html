@@ -6,11 +6,13 @@
 <section class="auth-card">
   <p class="eyebrow">Painel do lojista</p>
   <h1>Acessar sistema</h1>
-  <form method="post" class="stack">
+  <form method="post" class="form-shell form-shell-compact">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="button">Entrar</button>
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="form-actions">
+      <button type="submit" class="button">Entrar</button>
+    </div>
   </form>
-  <p class="auth-help">Use o superusuário ou um usuário da equipe local.</p>
+  <p class="auth-help">Use o usuario da equipe local para acessar o painel.</p>
 </section>
 {% endblock %}

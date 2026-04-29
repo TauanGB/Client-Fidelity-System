@@ -1,32 +1,15 @@
-{% for field in form %}
-  <div class="field-block{% if field.field.widget.input_type == 'radio' %} field-block-radio{% endif %}{% if field.field.widget.input_type == 'color' %} field-block-color{% endif %}{% if field.field.widget.input_type == 'file' %} field-block-file{% endif %}">
-    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+{% endfor %}
 
-    {% if field.field.widget.input_type == "radio" %}
-      <div class="choice-group" role="radiogroup" aria-labelledby="{{ field.id_for_label }}">
-        {% for choice in field %}
-          <label class="choice-card" for="{{ choice.id_for_label }}">
-            {{ choice.tag }}
-            <span class="choice-card-content">
-              <span class="choice-card-title">{{ choice.choice_label }}</span>
-            </span>
-          </label>
-        {% endfor %}
-      </div>
-    {% elif field.field.widget.input_type == "color" %}
-      <div class="color-field">
-        {{ field }}
-        <span class="color-value">{{ field.value|default_if_none:'' }}</span>
-      </div>
-    {% else %}
-      {{ field }}
-    {% endif %}
-
-    {% if field.help_text %}
-      <p class="field-help">{{ field.help_text }}</p>
-    {% endif %}
-    {% for error in field.errors %}
+{% if form.non_field_errors %}
+  <div class="form-non-field-errors">
+    {% for error in form.non_field_errors %}
       <p class="field-error">{{ error }}</p>
     {% endfor %}
   </div>
+{% endif %}
+
+{% for field in form.visible_fields %}
+  {% include "includes/form_field.html" with field=field span_class=default_span_class %}
 {% endfor %}
