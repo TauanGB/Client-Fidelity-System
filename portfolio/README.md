@@ -12,6 +12,14 @@ python -m http.server 8080 --bind 127.0.0.1 --directory "D:\GitHub\Client Fideli
 
 Abra **http://127.0.0.1:8080**. Encerre com `Ctrl+C`. Se a porta estiver ocupada, use outra porta livre. A opção `--directory` é obrigatória: nunca sirva a raiz do repositório. Não é necessário iniciar Django, instalar dependências, fazer build ou configurar variáveis de ambiente.
 
+## Entrada padrão do Django
+
+Por solicitação posterior, a rota `/` do sistema agora abre esta landing page, tanto para visitantes quanto para usuários autenticados. O acesso operacional permanece em `/dashboard/`, com login em `/accounts/login/`. O redirecionamento após login continua apontando para o painel.
+
+`core/portfolio_views.py` entrega o HTML diretamente, sem renderizar templates da empresa nem consultar modelos. Três rotas exatas (`/styles.css`, `/app.js` e `/favicon.svg`) entregam os recursos locais. Não existe uma rota genérica para servir o repositório. Os arquivos de `portfolio` continuam independentes e também podem ser servidos pelo comando acima.
+
+Foram aprovados 10 testes em `core/test_portfolio.py`, usando configuração Django sintética e banco desabilitado, sem carregar as configurações reais ou arquivos `.env`: raiz pública, raiz para usuário autenticado, conteúdo e tipos dos recursos, HEAD, bloqueio de POST, arquivos fora da lista, tentativa de sair da pasta, arquivo ausente e preservação das rotas/proteção do painel. Não houve deploy nem nova revisão visual.
+
 ## Demonstração
 
 1. Ana começa com 3 compras; Lucas com 1; Beatriz com 4. A meta fictícia é de 5 compras.
@@ -50,7 +58,7 @@ O contato não foi informado. Em `app.js`, preencha `PORTFOLIO_CONFIG.contactUrl
 ## Isolamento e publicação futura
 
 - Arquivos entregues: `index.html`, `styles.css`, `app.js`, `favicon.svg` e este `README.md`.
-- Não depende de rotas, autenticação, configurações, dependências ou deploy da aplicação original.
+- Os arquivos estáticos não dependem da aplicação original. O ajuste posterior da entrada padrão adiciona somente a entrega desses arquivos pelo Django, preservando autenticação, configurações e dependências existentes.
 - Não lê banco, `.env`, mídia, credenciais ou dados de clientes. Não faz requisições à produção.
 - Não há fontes externas, analytics, bibliotecas, persistência, cookies, formulários de envio ou serviços externos.
 - A política CSP restringe recursos à origem local e bloqueia conexões e envios de formulários. Todo conteúdo dinâmico usa `textContent` e criação de elementos.
@@ -72,6 +80,6 @@ Roteiro de conferência: estado inicial → compra → meta → resgate → novo
 - Paleta principal de texto conferida por cálculo: contraste mínimo de 4,77:1 entre os pares verificados. Isso não equivale a uma auditoria completa de acessibilidade.
 - Nenhuma API de rede, armazenamento, cookies ou inserção de HTML na simulação. A execução dos cenários bloqueia essas APIs para detectar seu uso acidental.
 - O manipulador estático padrão do Python, configurado com `portfolio` como raiz, respondeu corretamente aos quatro recursos públicos em teste **offline**, sem abrir sockets. Tentativas de sair da pasta e acessar código do projeto retornaram 404 nesse teste.
-- `git diff --exit-code` confirmou que nenhum arquivo rastreado da aplicação original foi modificado. A única entrada nova em `git status` é `portfolio/`.
+- Na entrega estática inicial, `git diff --exit-code` confirmou que nenhum arquivo rastreado da aplicação original havia sido modificado. O ajuste posterior da entrada padrão está descrito acima e altera somente as views/rotas necessárias, seus testes e esta documentação.
 
 **Revisão visual pendente:** a ferramenta de navegador falhou antes de abrir a página, informando que não encontrou um diretório necessário da plataforma Windows. A abertura de prévia no aplicativo também falhou. O acesso HTTP local foi bloqueado por `WinError 10013`; o processo temporário do servidor foi encerrado. Não houve revisão visual, teste real de teclado/leitor de tela, aferição de layout em desktop/celular ou captura final. Os breakpoints, estados de foco e recursos acessíveis foram implementados e inspecionados no código, mas não se afirma validação em navegador. Os testes de DOM e do manipulador offline não substituem essa revisão.

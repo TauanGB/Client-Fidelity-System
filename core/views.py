@@ -1,19 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.views import View
 from django.views.generic import TemplateView
 
 from .flow import build_panel_flow
 from company.models import CompanySettings
 from customers.models import Customer, PurchaseRecord
 from loyalty.models import LoyaltyCampaign, RewardRedemption
-
-
-class HomeRedirectView(View):
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect("core:dashboard")
-        return redirect("accounts:login")
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
