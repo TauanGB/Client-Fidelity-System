@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fidelity: um case de desenvolvimento de software para fidelização. Conheça a solução e experimente o ciclo de compras e recompensas com dados fictícios.">
+  <meta name="theme-color" content="#174be8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <title>Fidelity — Da primeira compra à próxima recompensa</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="header wrap">
+    <a class="brand" href="#inicio" aria-label="Fidelity, início"><span class="brand-icon" aria-hidden="true">f.</span>fidelity<span class="brand-period" aria-hidden="true">.</span></a>
+    <nav aria-label="Navegação principal"><a href="#solucao">A solução</a><a href="#funcionalidades">O produto</a><a href="#engenharia">Engenharia</a></nav>
+    <a class="button nav-button" href="#demonstracao">Experimentar <span aria-hidden="true">↗</span></a>
+  </header>
+  <main id="conteudo" tabindex="-1">
+    <section class="hero wrap" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="small-square" aria-hidden="true"></span> CASE DE DESENVOLVIMENTO WEB</p>
+        <h1 id="hero-title">Uma compra passa.<br>O relacionamento<br><em>permanece.</em></h1>
+        <p class="lead">Clientes, compras e recompensas em uma jornada de fidelidade. Um sistema desenvolvido para a operação da equipe e o acompanhamento de quem compra.</p>
+        <div class="hero-actions"><a class="button primary" href="#demonstracao">Explore a demonstração <span aria-hidden="true">↗</span></a><a class="text-link" href="#solucao">Conheça o projeto <span aria-hidden="true">↓</span></a></div>
+        <p class="hero-note">Produto em Django <span aria-hidden="true">·</span> Marca e dados demonstrativos</p>
+      </div>
+      <div class="hero-visual" role="img" aria-label="Ilustração do produto com dados fictícios: três clientes, oito compras e nenhum resgate. Ana está a duas compras de sua recompensa.">
+        <div class="visual-grid" aria-hidden="true"></div>
+        <div class="preview-window" aria-hidden="true">
+          <div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>fidelity / painel da equipe</span><span class="window-demo">DEMO</span></div>
+          <div class="preview-layout">
+            <div class="mini-sidebar"><strong>f.</strong><span class="sidebar-active">▦</span><span>◉</span><span>◇</span></div>
+            <div class="preview-content"><div class="preview-heading"><div><small>PAINEL DE FIDELIDADE</small><h3>Relacionamentos em dia.</h3></div><span class="avatar">FD</span></div>
+              <div class="mini-metrics"><div><span>Clientes</span><strong>03</strong></div><div><span>Compras</span><strong>08</strong></div><div><span>Resgates</span><strong>00</strong></div></div>
+              <div class="mini-table"><div class="table-caption">Clientes fictícios <span>Progresso</span></div><div><span><i class="person blue">AM</i>Ana Martins</span><b>3 / 5</b></div><div><span><i class="person peach">LC</i>Lucas Costa</span><b>1 / 5</b></div><div><span><i class="person purple">BS</i>Beatriz Souza</span><b>4 / 5</b></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-card" aria-hidden="true"><div class="card-brand"><span class="card-mark">f.</span><span>FIDELITY<small>SEU CARTÃO DE FIDELIDADE</small></span><span class="spark">✳</span></div><p>Olá, Ana.</p><h3>Voltar tem<br>seu valor.</h3><div class="stamp-row"><span class="filled">✓</span><span class="filled">✓</span><span class="filled">✓</span><span>4</span><span>5</span></div><p>Faltam 2 compras para sua recompensa.</p></div>
+        <span class="visual-caption">GESTÃO PARA A EQUIPE. CLAREZA PARA O CLIENTE.</span>
+      </div>
+    </section>
+    <div class="tech-strip"><div class="wrap"><span>DA REGRA DE NEGÓCIO À INTERFACE</span><b>Python</b><b>Django</b><b>Templates</b><b>CSS</b><b>Docker</b></div></div>
+    <section class="section wrap solution" id="solucao" aria-labelledby="solution-title">
+      <div><p class="eyebrow">01 / O PONTO DE PARTIDA</p><h2 id="solution-title">Mais contexto.<br>Menos controle disperso.</h2></div>
+      <div><p class="body-large">Quem comprou? Quem já pode resgatar? Quem não voltou neste mês?</p><p class="body-muted">O projeto reúne essas respostas em uma aplicação de fidelização: a equipe registra a compra, as regras definem o progresso e o cliente consulta sua próxima recompensa.</p><div class="solution-facts"><div><strong>Para a equipe</strong><span>Organizar a operação</span></div><div><strong>Para o cliente</strong><span>Acompanhar a jornada</span></div></div></div>
+    </section>
+    <section class="features-section" id="funcionalidades" aria-labelledby="features-title"><div class="section wrap">
+      <div class="section-heading"><div><p class="eyebrow">02 / O PRODUTO</p><h2 id="features-title">Cada etapa conectada.<br>Cada regra no lugar.</h2></div><p>Funcionalidades do sistema original,<br>verificadas no código do projeto.</p></div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">01 /</span><h3>Clientes com histórico</h3><p>Cadastro individual e registros de compras associados a cada cliente e campanha.</p></article>
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">02 /</span><h3>Campanhas com regras claras</h3><p>Metas por quantidade de compras ou ciclos mensais consecutivos, com mínimo de compras por mês.</p></article>
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">03 /</span><h3>Resgates sob controle</h3><p>Verificação de elegibilidade, histórico de recompensas resgatadas e início de um novo ciclo.</p></article>
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">04 /</span><h3>Atenção à frequência</h3><p>Sinalização de clientes sem compras no mês e do tempo desde a última compra.</p></article>
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">05 /</span><h3>Progresso à vista</h3><p>Consulta pública para o cliente acompanhar o progresso e a situação da recompensa.</p></article>
+        <article class="feature"><span class="feature-symbol" aria-hidden="true">06 /</span><h3>A identidade da empresa</h3><p>Configuração de nome, logo, banner, cores e tema em uma instância dedicada por empresa.</p></article>
+      </div>
+    </div></section>
+    <section class="section wrap" id="demonstracao" aria-labelledby="demo-title">
+      <div class="section-heading"><div><p class="eyebrow">03 / EXPERIMENTE</p><h2 id="demo-title">Você registra.<br>O cliente acompanha.</h2></div><p>Uma campanha fictícia de 5 compras.<br>Experimente da primeira ação ao resgate.</p></div>
+      <ol class="demo-steps" aria-label="Como experimentar"><li><span>1</span> Selecione um cliente</li><li><span>2</span> Complete 5 compras</li><li><span>3</span> Resgate e comece de novo</li></ol>
+      <noscript><p class="noscript-note">Ative o JavaScript para experimentar a demonstração. O restante do case pode ser consultado normalmente.</p></noscript>
+      <div class="interactive-demo">
+        <div class="demo-toolbar"><span><span class="small-square" aria-hidden="true"></span> DADOS FICTÍCIOS <span class="toolbar-detail">/ SIMULAÇÃO LOCAL</span></span><button id="reset-demo" class="reset-button" type="button" disabled><span aria-hidden="true">↺</span> Reiniciar simulação</button></div>
+        <div class="demo-columns">
+          <div class="operator"><div class="perspective-label"><span class="perspective">VISÃO DA EQUIPE</span><span class="surface-label">Painel de gestão</span></div><h3>Cada compra conta.</h3><p class="operator-intro">Os dois lados abaixo refletem o mesmo cliente.</p>
+            <label for="demo-customer">Cliente demonstrativo</label><select id="demo-customer" aria-describedby="selection-help" disabled><option value="ana">Ana Martins</option><option value="lucas">Lucas Costa</option><option value="beatriz">Beatriz Souza</option></select><p class="field-help" id="selection-help">O progresso de cada cliente é independente.</p>
+            <div class="customer-snapshot"><span class="large-avatar" id="customer-initials" aria-hidden="true">AM</span><div><strong id="customer-name">Ana Martins</strong><span id="operator-summary">3 compras neste ciclo · 0 resgates</span></div></div>
+            <div class="customer-state"><span class="status-tag" id="customer-status">Em progresso</span><span id="recency-status">Comprou neste mês</span></div>
+            <div class="demo-buttons"><button type="button" class="button primary" id="add-purchase" disabled>Registrar compra <span aria-hidden="true">+</span></button><button type="button" class="button secondary" id="redeem" disabled>Resgatar recompensa <span aria-hidden="true">↗</span></button></div>
+            <p class="demo-feedback" id="demo-feedback" role="status" aria-live="polite" aria-atomic="true">Ative o JavaScript para iniciar a simulação.</p>
+            <div class="demo-log"><h4>Histórico recente <span>FICTÍCIO</span></h4><ul id="activity-log"><li>3 compras fictícias no ciclo inicial.</li></ul></div>
+          </div>
+          <div class="client-view"><div class="perspective-label"><span class="perspective">VISÃO DO CLIENTE</span><span class="surface-label">Consulta de progresso</span></div>
+            <div class="loyalty-card"><div class="card-brand"><span class="card-mark" aria-hidden="true">f.</span><span>FIDELITY<small>SEU CARTÃO DE FIDELIDADE</small></span><span class="spark" aria-hidden="true">✳</span></div><p class="greeting">Olá, <strong id="public-name">Ana</strong>.</p><h3>Voltar tem<br>seu valor.</h3><div class="stamp-row" id="demo-stamps" aria-hidden="true"><span class="filled">✓</span><span class="filled">✓</span><span class="filled">✓</span><span>4</span><span>5</span></div>
+              <div id="demo-progress" class="progress-track" role="progressbar" aria-label="Compras para recompensa" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3" aria-valuetext="3 de 5 compras"><span id="progress-fill" class="progress-fill progress-3"></span></div><p class="progress-text" id="progress-text">Faltam 2 compras para sua recompensa.</p>
+              <div class="reward-detail"><svg aria-hidden="true" viewBox="0 0 32 32" fill="none"><path d="M5 14h22v14H5zM3 9h26v5H3zM16 9v19M16 9C4 9 9 0 13 5l3 4Zm0 0c12 0 7-9 3-4l-3 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><div><small>SUA RECOMPENSA</small><strong>Um presente surpresa</strong><span>Benefício fictício desta campanha</span></div></div>
+              <div class="card-footer"><span>5 compras = 1 recompensa</span><span id="cycle-number">Ciclo 1</span></div>
+            </div><p class="demo-disclaimer">Marca, clientes e compras demonstrativos.<br>Ao recarregar a página, tudo volta ao início.</p>
+          </div>
+        </div>
+      </div>
+      <div class="demo-footnotes"><p><strong>O resgate encerra o ciclo.</strong> Compras anteriores continuam no histórico; a próxima compra inicia uma nova contagem.</p><p><strong>Outro tipo de campanha no produto:</strong> ciclos mensais consecutivos. Neles, o resgate depende da meta de cada mês e do fechamento do último mês. Esta simulação usa apenas a regra de 5 compras.</p></div>
+    </section>
+    <section class="engineering-section" id="engenharia" aria-labelledby="engineering-title"><div class="wrap section engineering">
+      <div><p class="eyebrow">04 / DECISÕES DE ENGENHARIA</p><h2 id="engineering-title">A simplicidade da tela<br>começa na estrutura.</h2><p>O trabalho vai além do cadastro: modelar as regras da campanha, organizar os registros e conectar a gestão interna à consulta pública.</p><div class="architecture" aria-label="Módulos da aplicação"><span>Autenticação</span><span>Empresa</span><span>Clientes</span><span>Fidelidade</span><strong>Python + Django</strong></div></div>
+      <div class="engineering-list"><article><span>01</span><div><h3>Responsabilidades separadas</h3><p>Módulos Django para contas, empresa, clientes e fidelidade. O cálculo do progresso fica em uma camada de serviços.</p></div></article><article><span>02</span><div><h3>Regras explícitas de negócio</h3><p>Compras vinculadas à campanha, elegibilidade antes do resgate e contagem das compras após o último resgate.</p></div></article><article><span>03</span><div><h3>Uma instância por empresa</h3><p>Configuração única de identidade visual por implantação. O modelo é single-tenant, com implantação dedicada a cada empresa.</p></div></article></div>
+    </div></section>
+    <section class="wrap project-sheet" aria-labelledby="sheet-title"><h2 class="eyebrow" id="sheet-title">FICHA DO PROJETO</h2><dl><div><dt>Produto</dt><dd>Sistema web de fidelização</dd></div><div><dt>Backend original</dt><dd>Python + Django</dd></div><div><dt>Interface original</dt><dd>Django Templates + CSS</dd></div><div><dt>Este portfólio</dt><dd>HTML, CSS e JavaScript</dd></div></dl><p class="privacy-note">Esta apresentação é independente do sistema em produção. A interface foi recriada para o case com marca e dados sintéticos. A demonstração funciona em memória, sem conexão com o produto original.</p></section>
+    <section class="wrap closing" id="contato" aria-labelledby="closing-title"><span class="closing-mark" aria-hidden="true">f.</span><div><p class="eyebrow">DA NECESSIDADE AO PRODUTO</p><h2 id="closing-title">Sua operação tem regras.<br>Seu sistema pode entendê-las.</h2><p>Precisa desenvolver uma aplicação para o seu negócio?<br>Este case é uma amostra do trabalho que posso construir.</p><div class="closing-actions"><a id="contact-link" class="button primary" hidden>Converse sobre seu projeto <span aria-hidden="true">↗</span></a><a class="text-link" href="#demonstracao">Explorar o projeto <span aria-hidden="true">↗</span></a><span class="contact-pending" id="contact-pending">Canal de contato em configuração.</span></div></div></section>
+  </main>
+  <footer class="wrap footer"><a class="brand" href="#inicio" aria-label="Fidelity, voltar ao início"><span class="brand-icon" aria-hidden="true">f.</span>fidelity</a><span>Case de desenvolvimento · Marca demonstrativa</span><a href="#inicio">Voltar ao início <span aria-hidden="true">↑</span></a></footer>
+</body>
+</html>
